@@ -1,6 +1,8 @@
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
+import variables
+
 PORT = int(os.environ.get('PORT', 5000))
 
 # Enable logging
@@ -8,16 +10,33 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = '1771482978:AAGhSOaLYEKcK8NCBlYXK7_Iy7bHuajsO5o'
+TOKEN = variables.get_token()
+
+# def process_code(message):
+#     try:
+#         chat_id = message.chat.id
+#         code = message.text
+#         msg = T_bot.reply_to(message, '\'Mo cerco,aspé')
+#         T_bot.reply_to(message, track.from_dhl(code))
+#     except Exception as e:
+#         T_bot.reply_to(message, 'oooops')
+#
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
-    print('command: ' + update.message.json['text'] + ' - from: ' + update.message.json['from']['first_name'])
-    update.message.reply_text("we "+ update.message.json['from']['first_name']+", tutt'appost?")
+    print('command: ' + update.json['message']['text'] + ' - from: ' + update.json['message']['chat']['firstname'])
+    update.message.reply_text("we " + update.message.json['from']['first_name']+", tutt'appost?")
 
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
+
+#@T_bot.message_handler(commands=['dhl'])
+def find_order(update, context):
+    print('- from: ' + update.message.json['from']['first_name'])
+    update.send_message(update.message.json['chat']['id'], text='insert track number')
+    update.register_next_step_handler(update.message, 'process_code')
+    #bot.reply_to(message, track.from_dhl())
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -25,7 +44,7 @@ def help(update, context):
 
 def echo(update, context):
     """Echo the user message."""
-    update.message.reply_text(update.message.text)
+    update.message.reply_text(update.message.text+'ok')
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -33,9 +52,6 @@ def error(update, context):
 
 def main():
     """Start the bot."""
-    # Create the Updater and pass it your bot's token.
-    # Make sure to set use_context=True to use the new context based callbacks
-    # Post version 12 this will no longer be necessary
     updater = Updater(TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers

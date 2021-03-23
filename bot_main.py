@@ -23,16 +23,12 @@ def send_welcome(message):
     T_bot.reply_to(message, "we "+message.json['from']['first_name']+", tutt'appost?")
 
 @T_bot.message_handler(commands=['dhl'])
-def send_welcome(message):
+def find_order(message):
     print('- from: ' + message.json['from']['first_name'])
     T_bot.send_message(message.json['chat']['id'], text='insert track number')
     T_bot.register_next_step_handler(message, process_code)
     #bot.reply_to(message, track.from_dhl())
 
-@T_bot.message_handler(commands=['a'])
-def send_welcome(message):
-    print('command: ' + message.json['text'] + ' - from: ' + message.json['from']['first_name'])
-    T_bot.send_message(message, a())
 
 @T_bot.message_handler(commands=['vaccini'])
 def send_vaccini(message):
