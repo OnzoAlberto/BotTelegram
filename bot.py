@@ -25,17 +25,18 @@ TOKEN = variables.get_token()
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
+    """Send a message when the command /start is issued."""
+    update.message.reply_text('Hi!')
     print('command: ' + update.json['message']['text'] + ' - from: ' + update.json['message']['chat']['firstname'])
     update.message.reply_text("we " + update.message.json['from']['first_name']+", tutt'appost?")
 
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+
 
 #@T_bot.message_handler(commands=['dhl'])
-def find_order(update, context):
-    print('- from: ' + update.message.json['from']['first_name'])
-    update.send_message(update.message.json['chat']['id'], text='insert track number')
-    update.register_next_step_handler(update.message, 'process_code')
+def trace(update, context):
+    print('- from: ' + update.json['from']['first_name'])
+    update.send_message(update.json['chat']['id'], text='insert track number')
+    update.register_next_step_handler(update, 'process_code')
     #bot.reply_to(message, track.from_dhl())
 
 def help(update, context):
@@ -44,6 +45,7 @@ def help(update, context):
 
 def echo(update, context):
     """Echo the user message."""
+    print ('ok')
     update.message.reply_text(update.message.text+'ok')
 
 def error(update, context):
@@ -60,6 +62,7 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("trace", trace))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
