@@ -4,7 +4,7 @@ import os
 import variables
 
 PORT = int(os.environ.get('PORT', 5000))
-develop = True
+develop = False
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -37,9 +37,6 @@ def help(update, context):
 def trace(update, context):
     print('tracking from: ' + update.message.chat.first_name)
     update.message.reply_text(text='insert track number')
-
-    dp.add_handler(MessageHandler(Filters.text, help))
-
     update.register_next_step_handler(update, 'process_code')
     #bot.reply_to(message, track.from_dhl())
 
