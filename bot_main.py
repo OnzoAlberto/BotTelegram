@@ -2,7 +2,6 @@ from telegram.ext import updater
 import track, variables
 import telebot
 
-T_bot = telebot.TeleBot(variables.get_token())
 
 
 def a():
@@ -44,7 +43,9 @@ def echo_all(message):
     print('command: ' + message.json['text'] + ' - from: ' + message.json['from']['first_name'])
     T_bot.reply_to(message, "non ci sono ancora arrivato...")
 
-updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + variables.get_token())
-
+T_bot = telebot.TeleBot(variables.get_token())
 T_bot.poll()
+
+#updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + variables.get_token())
+
 #infinity_polling(True)
