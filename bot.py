@@ -28,7 +28,10 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     print('command: ' + update.message.text + ' - from:  '+update.message.chat.first_name)
     update.message.reply_text("we " +update.message.chat.first_name +", tutt'appost?")
-
+    if develop:
+        update.message.reply_text(" Sono in locale ")
+    else:
+        update.message.reply_text(" Sono su Heroku ")
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
