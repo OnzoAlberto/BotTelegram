@@ -3,7 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
 import variables
 import track
-from pyTelegramBotAPI import telebot
+import telebot
 
 PORT = int(os.environ.get('PORT', 5000))
 develop = False
