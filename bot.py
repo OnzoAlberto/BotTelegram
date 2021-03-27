@@ -6,7 +6,7 @@ import track
 from pyTelegramBotAPI import telebot
 
 PORT = int(os.environ.get('PORT', 5000))
-develop = True
+develop = False
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
