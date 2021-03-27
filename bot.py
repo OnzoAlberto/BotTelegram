@@ -2,9 +2,11 @@ import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
 import variables
+import track
+from pyTelegramBotAPI import telebot
 
 PORT = int(os.environ.get('PORT', 5000))
-develop = False
+develop = True
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -12,76 +14,72 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 TOKEN = variables.get_token()
 
-# def process_code(message):
-#     try:
-#         chat_id = message.chat.id
-#         code = message.text
-#         msg = T_bot.reply_to(message, '\'Mo cerco,aspé')
-#         T_bot.reply_to(message, track.from_dhl(code))
-#     except Exception as e:
-#         T_bot.reply_to(message, 'oooops')
-#
+T_bot = telebot.TeleBot(TOKEN)
 
-# Define a few command handlers. These usually take the two arguments update and
-# context. Error handlers also receive the raised TelegramError object in error.
-def start(update, context):
-    """Send a message when the command /start is issued."""
-    print('command: ' + update.message.text + ' - from:  '+update.message.chat.first_name)
-    update.message.reply_text("we " +update.message.chat.first_name +", tutt'appost?")
+def process_code(message):
+    try:
+        chat_id = message.chat.id
+        code = message.text
+        msg = T_bot.send_message(message, '\'Mo cerco,aspé')
+        T_bot.send_message(message, track.from_dhl(code))
+    except Exception as e:
+        T_bot.send_message(message, 'oooops')
+
+@T_bot.message_handler(commands=['start', 'help'])
+def start(message):
+    print('command: ' + message.json['text'] + ' - from: ' + message.json['from']['first_name'])
+    T_bot.send_message(message.json['chat']['id'], text="we "+message.json['from']['first_name']+", tutt'appost?")
+    print('path : ' + str(os.path))
     if develop:
-        update.message.reply_text(" Sono in locale ")
+        T_bot.send_message(message.json['chat']['id'], text="Sono in locale")
     else:
-        update.message.reply_text(" Sono su Heroku ")
-def help(update, context):
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+        T_bot.send_message(message.json['chat']['id'], text="Sono su Eroku")
+
+@T_bot.message_handler(commands=['trace'])
+def trace(message):
+    print('- from: ' + message.json['from']['first_name'])
+    T_bot.send_message(message.json['chat']['id'], text='insert track number')
+    T_bot.register_next_step_handler(message, process_code)
 
 
-def trace(update, context):
-    print('tracking from: ' + update.message.chat.first_name)
-    update.message.reply_text(text='insert track number')
-    update.register_next_step_handler(update, 'process_code')
-    #bot.reply_to(message, track.from_dhl())
+@T_bot.message_handler(func=lambda m: True)
+def echo_all(message):
+    print('command: ' + message.json['text'] + ' - from: ' + message.json['from']['first_name'])
+    T_bot.send_message(message, "non ci sono ancora arrivato...")
 
-
-def echo(update, context):
-    """Echo the user message."""
-    print('ok')
-    update.message.reply_text('ok')
-
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def main():
 
-    """Start the bot."""
-    updater = Updater(TOKEN, use_context=True)
-    # Get the dispatcher to register handlers
-    dp = updater.dispatcher
-
-    # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("trace", trace))
-
-    # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, echo))
-
-    # log all errors
-    dp.add_error_handler(error)
 
     # Start the Bot
     if develop:
-        updater.start_polling()
+        #T_bot.delete_webhook()
+        T_bot.infinity_polling(True)
     else:
+        """Start the bot."""
+        updater = Updater(TOKEN, use_context=True)
+        # Get the dispatcher to register handlers
+        dp = updater.dispatcher
+
+        # on different commands - answer in Telegram
+        dp.add_handler(CommandHandler("start", start))
+        dp.add_handler(CommandHandler("help", help))
+        dp.add_handler(CommandHandler("trace", trace))
+
+        # on noncommand i.e message - echo the message on Telegram
+        dp.add_handler(MessageHandler(Filters.text, echo_all))
+
+        # log all errors
+        dp.add_error_handler(echo_all)
+
         updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
         updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
+        # Run the bot until you press Ctrl-C or the process receives SIGINT,
+        # SIGTERM or SIGABRT. This should be used most of the time, since
+        # start_polling() is non-blocking and will stop the bot gracefully.
+        updater.idle()
+
 
 if __name__ == '__main__':
     main()
