@@ -50,11 +50,11 @@ def echo_all(message):
 
 def main():
 
+    T_bot.infinity_polling(True)
 
     # Start the Bot
     if develop:
         T_bot.delete_webhook()
-        T_bot.infinity_polling(True)
     else:
         """Start the bot."""
         updater = Updater(TOKEN, use_context=True)
