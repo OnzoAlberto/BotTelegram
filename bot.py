@@ -29,7 +29,7 @@ def process_code(message):
 def start(message):
     print('command: ' + message.json['text'] + ' - from: ' + message.json['from']['first_name'])
     T_bot.send_message(message.json['chat']['id'], text="we "+message.json['from']['first_name']+", tutt'appost?")
-    print('path : ' + str(os.path))
+    print('**** - path : ' + str(os.path))
     if develop:
         T_bot.send_message(message.json['chat']['id'], text="Sono in locale")
     else:
