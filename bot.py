@@ -39,7 +39,7 @@ def start(message):
 def trace(message):
     print('- from: ' + message.json['from']['first_name'])
     T_bot.send_message(message.json['chat']['id'], text='insert track number')
-    T_bot.register_next_step_handler(message, process_code)
+    T_bot.register_next_step_handler(message, process_code())
 
 
 @T_bot.message_handler(func=lambda m: True)
@@ -50,11 +50,10 @@ def echo_all(message):
 
 def main():
 
-
     # Start the Bot
     if develop:
         T_bot.delete_webhook()
-        T_bot.infinity_polling(True)
+        #T_bot.infinity_polling(True)
     else:
         """Start the bot."""
         updater = Updater(TOKEN, use_context=True)
@@ -71,8 +70,8 @@ def main():
         #
         # # log all errors
         # dp.add_error_handler(echo_all)
-    
-    T_bot.poll_handlers()
+
+    T_bot.polling()
     updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
     updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
