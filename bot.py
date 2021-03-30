@@ -3,7 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
 import variables
 import track
-from pyTelegramBotAPI import telebot
+import telebot
 from flask import Flask, request
 
 TOKEN = variables.get_token()
