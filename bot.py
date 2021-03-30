@@ -54,6 +54,7 @@ def main():
     # Start the Bot
     if develop:
         T_bot.delete_webhook()
+        T_bot.infinity_polling(True)
     else:
         """Start the bot."""
         updater = Updater(TOKEN, use_context=True)
@@ -70,10 +71,11 @@ def main():
         #
         # # log all errors
         # dp.add_error_handler(echo_all)
-
+    
+    T_bot.poll_handlers()
     updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
     updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
-    T_bot.infinity_polling(True)
+
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
