@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 TOKEN = variables.get_token()
 
 T_bot = telebot.TeleBot(TOKEN)
-
+T_bot.delete_webhook()
 def process_code(message):
     try:
         chat_id = message.chat.id
