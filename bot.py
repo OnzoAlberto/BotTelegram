@@ -42,6 +42,14 @@ def trace(message):
     T_bot.register_next_step_handler(message, process_code())
 
 
+@T_bot.message_handler(commands=['vaccini'])
+def send_vaccini(message):
+    print('Vaccini request from: ' + message.json['from']['first_name'])
+    # I take the data from the official website
+    region_list = track.download_from_url()
+    for region in region_list:
+        T_bot.reply_to(message, 'Regione: ' + region['nome_area'] + '\n' + 'Dosi somministrate: ' + str(region['dosi_somministrate']) + '\n')
+
 @T_bot.message_handler(func=lambda m: True)
 def echo_all(message):
     print('command: ' + message.json['text'] + ' - from: ' + message.json['from']['first_name'])
@@ -71,7 +79,7 @@ def main():
         # # log all errors
         # dp.add_error_handler(echo_all)
 
-    T_bot.polling()
+    T_bot.polling(True)
     updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
     updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
