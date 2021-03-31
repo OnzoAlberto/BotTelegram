@@ -14,10 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 TOKEN = os.environ.get('TOKEN')
-# variables.get_token()
-
 T_bot = telebot.TeleBot(TOKEN)
-T_bot.delete_webhook()
 
 if path[9:11] == 'nt':
     develop = True
@@ -87,11 +84,12 @@ def main():
         #
         # # log all errors
         # dp.add_error_handler(echo_all)
+        T_bot.polling(none_stop=False, interval=0, timeout=20)
 
         updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
-        updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
+        #updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
-        #T_bot.set_webhook()
+        T_bot.set_webhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
         # Run the bot until you press Ctrl-C or the process receives SIGINT,
         # SIGTERM or SIGABRT. This should be used most of the time, since

@@ -1,8 +1,7 @@
 import urllib.request
 import json
 import requests
-import variables
-
+import os
 
 def func_1():
     print('a')
@@ -12,7 +11,7 @@ def func_1():
 def from_dhl(code):
     headers = {
         'accept': 'application/json',
-        'DHL-API-Key': variables.get_dhl(),
+        'DHL-API-Key': os.environ.get('DHLkey'),
     }
     params = (
         ('trackingNumber', code),
