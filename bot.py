@@ -67,12 +67,12 @@ def main():
     # Start the Bot
     if develop:
         T_bot.delete_webhook()
-        #T_bot.infinity_polling(True)
+        T_bot.infinity_polling(True)
     else:
         """Start the bot."""
         updater = Updater(TOKEN, use_context=True)
         # Get the dispatcher to register handlers
-    dp = updater.dispatcher
+    updater.dispatcher
         #
         # # on different commands - answer in Telegram
         # dp.add_handler(CommandHandler("start", start))
@@ -85,7 +85,7 @@ def main():
         # # log all errors
         # dp.add_error_handler(echo_all)
 
-    T_bot.polling(True)
+
     updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
     updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
@@ -94,7 +94,7 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
+    updater.start_polling()
 
 if __name__ == '__main__':
     main()
