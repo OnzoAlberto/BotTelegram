@@ -6,7 +6,8 @@ import track
 import telebot
 
 PORT = int(os.environ.get('PORT', 5000))
-develop = False
+path = str(os.path)
+
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -16,6 +17,12 @@ TOKEN = variables.get_token()
 
 T_bot = telebot.TeleBot(TOKEN)
 T_bot.delete_webhook()
+
+if path[9:11] == 'nt':
+    develop = True
+else:
+    develop = False
+
 def process_code(message):
     try:
         chat_id = message.chat.id
@@ -29,7 +36,6 @@ def process_code(message):
 def start(message):
     print('command: ' + message.json['text'] + ' - from: ' + message.json['from']['first_name'])
     T_bot.send_message(message.json['chat']['id'], text="we "+message.json['from']['first_name']+", tutt'appost?")
-    print('**** - path : ' + str(os.path))
     if develop:
         T_bot.send_message(message.json['chat']['id'], text="Sono in locale")
     else:
@@ -66,7 +72,7 @@ def main():
         """Start the bot."""
         updater = Updater(TOKEN, use_context=True)
         # Get the dispatcher to register handlers
-        # dp = updater.dispatcher
+     dp = updater.dispatcher
         #
         # # on different commands - answer in Telegram
         # dp.add_handler(CommandHandler("start", start))
