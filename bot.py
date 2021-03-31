@@ -13,13 +13,18 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = os.environ.get('TOKEN')
-T_bot = telebot.TeleBot(TOKEN)
+
 
 if path[9:11] == 'nt':
     develop = True
 else:
     develop = False
+
+if develop:
+    TOKEN = variables.get_token()
+else:
+    TOKEN = os.environ.get('TOKEN')
+T_bot = telebot.TeleBot(TOKEN)
 
 def process_code(message):
     try:
@@ -90,11 +95,12 @@ def main():
         #updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
         T_bot.set_webhook('https://trackbotv1.herokuapp.com/' + TOKEN)
+        T_bot.remove_webhook()
 
         # Run the bot until you press Ctrl-C or the process receives SIGINT,
         # SIGTERM or SIGABRT. This should be used most of the time, since
         # start_polling() is non-blocking and will stop the bot gracefully.
-        updater.idle()
+        #updater.idle()
 
 
 if __name__ == '__main__':
