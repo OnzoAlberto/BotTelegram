@@ -13,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = variables.get_token()
+#TOKEN = variables.get_token()
 
 T_bot = telebot.TeleBot(TOKEN)
 T_bot.delete_webhook()
@@ -71,14 +71,14 @@ def main():
     else:
         """Start the bot."""
         updater = Updater(TOKEN, use_context=True)
-        updater.start_polling()
+
 
         # Get the dispatcher to register handlers
-    updater.dispatcher
+        dp = updater.dispatcher
         #
         # # on different commands - answer in Telegram
         # dp.add_handler(CommandHandler("start", start))
-        # dp.add_handler(CommandHandler("help", help))
+        dp.add_handler(CommandHandler("help", help))
         # dp.add_handler(CommandHandler("trace", trace))
         #
         # # on noncommand i.e message - echo the message on Telegram
@@ -87,14 +87,15 @@ def main():
         # # log all errors
         # dp.add_error_handler(echo_all)
 
-    updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
-    updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
+        updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
+        updater.bot.setWebhook('https://trackbotv1.herokuapp.com/' + TOKEN)
 
+        #T_bot.set_webhook()
 
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
+        # Run the bot until you press Ctrl-C or the process receives SIGINT,
+        # SIGTERM or SIGABRT. This should be used most of the time, since
+        # start_polling() is non-blocking and will stop the bot gracefully.
+        updater.idle()
 
 
 if __name__ == '__main__':
