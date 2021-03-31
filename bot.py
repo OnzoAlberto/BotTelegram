@@ -1,7 +1,6 @@
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
-import keys
 import track
 import telebot
 
@@ -21,6 +20,7 @@ else:
     develop = False
 
 if develop:
+    import keys
     TOKEN = keys.get_token()
 else:
     TOKEN = os.environ.get('TOKEN')
@@ -69,7 +69,10 @@ def main():
 
     # Start the Bot
     if develop:
-        T_bot.delete_webhook()
+        try:
+            T_bot.delete_webhook()
+        except:
+            print('jamm ja')
         T_bot.infinity_polling(True)
     else:
         """Start the bot."""
