@@ -72,7 +72,7 @@ def main():
         """Start the bot."""
         updater = Updater(TOKEN, use_context=True)
         # Get the dispatcher to register handlers
-     dp = updater.dispatcher
+    dp = updater.dispatcher
         #
         # # on different commands - answer in Telegram
         # dp.add_handler(CommandHandler("start", start))
