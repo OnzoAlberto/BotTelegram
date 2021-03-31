@@ -1,7 +1,7 @@
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
-import variables
+import keys
 import track
 import telebot
 
@@ -21,7 +21,7 @@ else:
     develop = False
 
 if develop:
-    TOKEN = variables.get_token()
+    TOKEN = keys.get_token()
 else:
     TOKEN = os.environ.get('TOKEN')
 T_bot = telebot.TeleBot(TOKEN)
