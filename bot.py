@@ -13,7 +13,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-#TOKEN = variables.get_token()
+TOKEN = os.environ.get('TOKEN')
+# variables.get_token()
 
 T_bot = telebot.TeleBot(TOKEN)
 T_bot.delete_webhook()
